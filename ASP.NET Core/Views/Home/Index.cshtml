@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using Syncfusion.EJ2
+<div class="login">
+
+        <label>
+            <b>
+                User Name
+            </b>
+        </label>
+        <input type="text" name="Uname" id="Uname" placeholder="Username">
+        <br><br>
+        <label>
+            <b>
+                Password
+            </b>
+        </label>
+        <input type="Password" name="Pass" id="Pass" placeholder="Password">
+        <br><br>
+        <input type="submit" value="Login" onclick="validateform()">
+  
+</div>
+<script>
+   
+    function validateform() {
+
+        var name = document.getElementById('Uname').value;
+        var password = document.getElementById('Pass').value;
+        userName = name;
+        window.location.href = '';
+        if (name == null || name == "") {
+            alert("Name can't be blank");
+            return false;
+        } else if (name == "User1" && password == "User1") {
+
+            window.location.href = "http://localhost:5000/Home/Documenteditor?userName=" +userName;
+        } else if (name == "User2" && password == "User2") {
+
+            window.location.href = "http://localhost:5000/Home/Documenteditor?userName=" +userName;
+        }
+        else if (name == "Author" && password == "Author") {
+
+            window.location.href = "http://localhost:5000/Home/Documenteditor?userName=" +userName;
+        }
+         else {
+            alert("provide validate name and password")
+        }
+    }
+</script>  
