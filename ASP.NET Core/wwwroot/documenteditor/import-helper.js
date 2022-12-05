@@ -136,7 +136,7 @@ function wireEventsInTitleBar() {
 }
 function onSave() {
     let http = new XMLHttpRequest();
-    http.open('POST','api/documenteditor/ExportSFDT');
+    http.open('POST','/api/documenteditor/ExportSFDT');
     http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     http.responseType = 'json';
     //Serialize document content as SFDT.
