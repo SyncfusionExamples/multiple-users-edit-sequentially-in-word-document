@@ -89,9 +89,11 @@ var grid = new ej.grids.Grid({
 });
 
 grid.appendTo('#Grid');
-
+var fileName= '';
+var userName = '';
 function rowSelected(args) {
-  fileName =args.data.DocumentName;
+  fileName = args.data.DocumentName;
+  userName = args.data.AuthorName;
 }
 // Initialize Dialog component
 var editorPopup = new ej.popups.Dialog({
@@ -172,7 +174,7 @@ function onOpen(args) {
   // setting maxHeight to the Dialog.
   args.maxHeight = '600px';
 }
-var fileName= '';
+
 function onClose(){
     makeHTTPRequest("LogOut");
     refresh();
@@ -191,8 +193,24 @@ function openDocumentEditor(){
 }
       
 function deleteRecords(){
-  makeHTTPRequest("DeleteRecords");
-  refresh();
+  if(userName == "") {
+    selectionAlertDialog();
+  }
+  else if(userName == "@ViewBag.userName"){
+    makeHTTPRequest("DeleteRecords");
+    refresh();
+  }
+  else {
+    ej.popups.DialogUtility.alert({
+      title: 'Can\'t delete this document',
+      content: "You are not allowed to delete the other user-created document.",
+      okButton: { text: 'OK' },
+      isModal: true,
+      showCloseIcon: true,
+      closeOnEscape: true,
+      animationSettings: { effect: 'Zoom' }
+    })
+  }
 }
 function refresh(){
   location.reload();
@@ -253,7 +271,15 @@ function createNewDocument(){
 }
 document.getElementById('edit').addEventListener('click', () => {
   if (fileName == "") {
-    ej.popups.DialogUtility.alert({
+    selectionAlertDialog();
+  }
+  else {
+    ImportDocument();
+  }
+
+});
+function selectionAlertDialog() {
+  ej.popups.DialogUtility.alert({
       title: 'Alert',
       content: "Please select the document",
       okButton: { text: 'OK' },
@@ -262,12 +288,7 @@ document.getElementById('edit').addEventListener('click', () => {
       closeOnEscape: true,
       animationSettings: { effect: 'Zoom' }
     })
-  }
-  else {
-    ImportDocument();
-  }
-
-});
+}
 function ImportDocument(){
   var http = new XMLHttpRequest();
   http.open('POST', '/api/documenteditor/ImportFile');
