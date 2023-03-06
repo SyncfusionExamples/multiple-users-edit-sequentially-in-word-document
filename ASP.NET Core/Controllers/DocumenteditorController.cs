@@ -23,12 +23,12 @@ namespace DocumentEditorApp.Controllers
     [ApiController]
     public class DocumenteditorController : ControllerBase
     {
-        private IHostingEnvironment hostEnvironment;
+        private IWebHostEnvironment hostEnvironment;
 
         private string dataSourcePath;
 
         private string connectionString;
-        public DocumenteditorController(IHostingEnvironment environment)
+        public DocumenteditorController(IWebHostEnvironment environment)
         {
             this.hostEnvironment = environment;
             this.dataSourcePath = Path.Combine(this.hostEnvironment.ContentRootPath,"AppData"+"\\DocumentInfo.accdb");
@@ -108,8 +108,10 @@ namespace DocumentEditorApp.Controllers
                 string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dataSourcePath + ";User Id=admin;Password=;";
                 DataTable table = getDatabaseData(connectionString,query);
                 string Result = Newtonsoft.Json.JsonConvert.SerializeObject(table);
-                string status = (string)table.Rows[0][0];
-                if(status != ""){
+                string status = "";
+                if (table.Rows[0][0] is string)
+                    status = (string)table.Rows[0][0];
+                if (status != ""){
                     return Result;
                 }
                 DateTime date = DateTime.Now;
@@ -129,9 +131,8 @@ namespace DocumentEditorApp.Controllers
         }
 
         [Route("LogOut")]
-
-        public void LogOut([FromBody]Documentdetails param){
-            string SQLquery = "UPDATE DocumentInfo SET EditorName = '' WHERE DocumentName = '"+param.FileName+"'";
+        public void LogOut([FromBody]CustomParams param){
+            string SQLquery = "UPDATE DocumentInfo SET EditorName = '' WHERE DocumentName = '"+ param.fileName +"'";
             performCRUD(connectionString,SQLquery);
         }
         
@@ -171,7 +172,7 @@ namespace DocumentEditorApp.Controllers
         public void ExportSFDT([FromBody]Saveparameter data)
         {
             string name = data.FileName;
-           string path = this.hostEnvironment.WebRootPath + "\\Files\\" + data.FileName;
+            string path = this.hostEnvironment.WebRootPath + "\\Files\\" + data.FileName;
             EJ2DocumentEditor.FormatType format = GetFormatType(data.FileName);
             if (string.IsNullOrEmpty(name))
             {

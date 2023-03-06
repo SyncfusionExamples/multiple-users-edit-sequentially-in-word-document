@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
 @using Syncfusion.EJ2
 <div class="login">
 
@@ -22,9 +23,8 @@
   
 </div>
 <script>
-   
     function validateform() {
-
+        
         var name = document.getElementById('Uname').value;
         var password = document.getElementById('Pass').value;
         userName = name;
@@ -34,17 +34,17 @@
             return false;
         } else if (name == "User1" && password == "User1") {
 
-            window.location.href = "http://localhost:5000/Home/Documenteditor?userName=" +userName;
+            window.location.href = "/Home/Documenteditor?userName=" +userName;
         } else if (name == "User2" && password == "User2") {
 
-            window.location.href = "http://localhost:5000/Home/Documenteditor?userName=" +userName;
+            window.location.href = "/Home/Documenteditor?userName=" +userName;
         }
         else if (name == "Author" && password == "Author") {
 
-            window.location.href = "http://localhost:5000/Home/Documenteditor?userName=" +userName;
+            window.location.href = "/Home/Documenteditor?userName=" +userName;
         }
          else {
             alert("provide validate name and password")
         }
     }
-</script>  
+</script>
